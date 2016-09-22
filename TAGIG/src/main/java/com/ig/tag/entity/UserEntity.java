@@ -10,6 +10,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
@@ -43,11 +46,21 @@ public class UserEntity {
 	@JoinTable(name="userRoleMapping",joinColumns=@JoinColumn(name="userId",referencedColumnName="id"),inverseJoinColumns=@JoinColumn(name="roleId",referencedColumnName="id"))
 	private Set<RolesEntity> roles;
 	
+	@OneToMany(targetEntity=TeamsEntity.class,mappedBy="user")
+    private TeamsEntity userTeam;
+	
+	
+	public TeamsEntity getUserTeam() {
+		return userTeam;
+	}
+
+	public void setUserTeam(TeamsEntity userTeam) {
+		this.userTeam = userTeam;
+	}
+
 	public Set<RolesEntity> getRoles() {
 		return roles;
 	}
-
-
 
 	public void setRoles(Set<RolesEntity> roles) {
 		this.roles = roles;
