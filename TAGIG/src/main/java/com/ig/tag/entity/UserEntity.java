@@ -38,15 +38,15 @@ public class UserEntity {
 	@NotNull
 	private String gender;
 	
-	@ManyToMany(fetch=FetchType.EAGER,cascade=CascadeType.ALL)
+	@ManyToMany(fetch=FetchType.LAZY,cascade=CascadeType.ALL)
 	@JoinTable(name="userProjectsMapping",joinColumns=@JoinColumn(name="userId",referencedColumnName="id"),inverseJoinColumns=@JoinColumn(name="projectId",referencedColumnName="id"))
 	private Set<ProjectsEntity> projects;
 	
-	@ManyToMany(fetch=FetchType.EAGER,cascade=CascadeType.ALL)
+	@ManyToMany(fetch=FetchType.LAZY,cascade=CascadeType.ALL)
 	@JoinTable(name="userRoleMapping",joinColumns=@JoinColumn(name="userId",referencedColumnName="id"),inverseJoinColumns=@JoinColumn(name="roleId",referencedColumnName="id"))
 	private Set<RolesEntity> roles;
 	
-	@OneToMany(targetEntity=TeamsEntity.class,mappedBy="user")
+	/*@OneToMany(targetEntity=TeamsEntity.class,mappedBy="user")
     private TeamsEntity userTeam;
 	
 	
@@ -57,7 +57,7 @@ public class UserEntity {
 	public void setUserTeam(TeamsEntity userTeam) {
 		this.userTeam = userTeam;
 	}
-
+*/
 	public Set<RolesEntity> getRoles() {
 		return roles;
 	}

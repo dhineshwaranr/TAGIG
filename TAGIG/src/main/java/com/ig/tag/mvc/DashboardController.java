@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -34,18 +35,7 @@ public class DashboardController {
 		return getAllUsers;
 	}
 	
-	@RequestMapping(value="/getAllProjects",method=RequestMethod.GET)
-	@ResponseBody
-	public List<ProjectsEntity> getAllProjects(){
-		List<ProjectsEntity> getAllprojects = null;
-		try{
-			System.out.println("-1-->");
-			getAllprojects = projectServiceImple.getAllProjects();
-		}catch(Exception e){
-			System.out.println(e);
-		}
-		return getAllprojects;
-	}
+	
 	
 	@RequestMapping(value="/register",method=RequestMethod.POST)
 	@ResponseBody
