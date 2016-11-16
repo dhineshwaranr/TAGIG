@@ -25,8 +25,8 @@ public class ProjectsEntity {
 	@NotNull
 	private String projectCode;
 	
-	@ManyToMany(fetch=FetchType.LAZY,cascade=CascadeType.ALL)
-	@JoinTable(name="teamsProjectsMapping",joinColumns=@JoinColumn(name="projectId",referencedColumnName="id"),inverseJoinColumns=@JoinColumn(name="teamId",referencedColumnName="id"))
+	@ManyToMany(fetch=FetchType.LAZY,cascade=CascadeType.ALL,mappedBy="projects")
+	//@JoinTable(name="teamsProjectsMapping",joinColumns=@JoinColumn(name="projectId",referencedColumnName="id"),inverseJoinColumns=@JoinColumn(name="teamId",referencedColumnName="id"))
 	private List<TeamsEntity> team;
 	
 	public List<TeamsEntity> getTeam() {

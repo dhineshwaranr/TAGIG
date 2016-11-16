@@ -23,7 +23,7 @@ public class TeamsEntity {
 	private String teamCode;
 	
 	@ManyToMany(fetch=FetchType.LAZY,cascade=CascadeType.ALL)
-	@JoinTable(name="teamsProjectsMapping",joinColumns=@JoinColumn(name="teamId",referencedColumnName="id"),inverseJoinColumns=@JoinColumn(name="projectId",referencedColumnName="id"))
+	//@JoinTable(name="teamsProjectsMapping",joinColumns=@JoinColumn(name="teamId",referencedColumnName="id"),inverseJoinColumns=@JoinColumn(name="projectId",referencedColumnName="id"))
 	private List<ProjectsEntity> projects;
 	
 	public List<ProjectsEntity> getProjects() {

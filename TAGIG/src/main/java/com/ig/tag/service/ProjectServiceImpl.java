@@ -25,7 +25,9 @@ public class ProjectServiceImpl implements ProjectService {
 	@Override
 	public List<ProjectsEntity> getAllProjects() {
 		System.out.println("--2->");
-		return projectsRepository.findAll();
+		List<ProjectsEntity> p = projectsRepository.findAll();
+		System.out.println(p);
+		return p;
 	}
 
 	@Override
@@ -53,7 +55,7 @@ public class ProjectServiceImpl implements ProjectService {
 		int team = Integer.parseInt(teamId);
 		ProjectsEntity p = projectsRepository.findById(project);
 		TeamsEntity t = teamRepository.findById(team);
-		ProjectsEntity o = projectsRepository.findAllByTeamAndProject(project, team);
+		ProjectsEntity o = projectsRepository.findAllByTeamAndProject(team, project);
 		return o;
 	}
 
