@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -53,6 +54,21 @@ public class TeamController {
 		}
 		
 		return allTeamProjects;
+	}
+	
+	@RequestMapping(value="getByTeam_Projects/{teamId}/{projectId}",method=RequestMethod.GET)
+	@ResponseBody
+	public TeamsEntity getByTeamProject(
+			@PathVariable(value="teamId") String teamId,
+			@PathVariable(value="projectId") String projectId){
+			
+		TeamsEntity pe = teamService.getByTeamProject(teamId, projectId);
+		//System.out.println(pe);
+		/*for(TeamsEntity te : pe.getTeam()){
+			System.out.println(te.getTeamName());
+		}*/
+		
+		return null;
 	}
 	
 }
