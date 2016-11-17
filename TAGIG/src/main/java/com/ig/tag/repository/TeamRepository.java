@@ -12,7 +12,6 @@ public interface TeamRepository extends JpaRepository<TeamsEntity, Long> {
 
 	@SuppressWarnings("unchecked")
 	public TeamsEntity save(TeamsEntity team);
-	
 	public TeamsEntity findById(int id);
 	
 	@Query(value="select * from teams as t JOIN projects as p on (t.id = ?1 and p.id = ?2)", nativeQuery=true)

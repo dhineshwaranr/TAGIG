@@ -9,6 +9,7 @@ public interface TeamServices {
 
 	public void addTeam(TeamsEntity team);
 	public List<TeamsEntity> getAllTeams();
+	public TeamsEntity findByTeamId(int team);
 	public TeamsEntity getByTeamProject(String teamId, String projectId); 
 	
 }

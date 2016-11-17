@@ -37,4 +37,10 @@ public class TeamServiceImpl implements TeamServices {
 		return o;
 	}
 
+	@Override
+	public TeamsEntity findByTeamId(int team) {
+		TeamsEntity te = teamRepository.findById(team);
+		return te;
+	}
+
 }

@@ -71,4 +71,13 @@ public class TeamController {
 		return null;
 	}
 	
+	@RequestMapping(value="getByTeam/{teamId}",method=RequestMethod.GET)
+	@ResponseBody
+	public TeamsEntity getByTeam(
+			@PathVariable(value="teamId") String teamId){
+		TeamsEntity pe = teamService.findByTeamId(Integer.parseInt(teamId));
+		System.out.println("ffff");
+		System.out.println(pe);
+		return pe;
+	}
 }
