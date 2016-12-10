@@ -15,65 +15,40 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ig.tag.dto.ProjectDTO;
 import com.ig.tag.dto.TeamsDTO;
-import com.ig.tag.entity.ProjectsEntity;
-import com.ig.tag.entity.TeamsEntity;
+import com.ig.tag.entity.ProjectEntity;
+import com.ig.tag.entity.TeamEntity;
+import com.ig.tag.entity.UserEntity;
+import com.ig.tag.repository.ProjectRepository;
 import com.ig.tag.service.ProjectServiceImpl;
 
 @Controller
 public class ProjectController {
 	
 	@Autowired
-	private ProjectServiceImpl projectService;
+	private ProjectRepository projectRepo;
 	
-	@RequestMapping(value="/addProject",method=RequestMethod.POST)
+	@RequestMapping(value="/project",method=RequestMethod.POST)
 	@ResponseBody
-	public String addProject(@ModelAttribute ProjectsEntity project){
-		System.out.println(project.getProjectName());
-		return "Success";
-	}
-	
-	@RequestMapping(value="/getAllProjects",method=RequestMethod.GET)
-	@ResponseBody
-	public ArrayList<ProjectDTO> getAllProjects(){
-		List<ProjectsEntity> getAllprojects = null;
-		ArrayList<ProjectDTO> allProjects = new ArrayList<ProjectDTO>();
+	public String addProject(@ModelAttribute ProjectEntity project){
 		try{
-			getAllprojects = projectService.getAllProjects();
-			for(ProjectsEntity pe : getAllprojects){
-				ProjectDTO projectDto = new ProjectDTO();
-				projectDto.setProjectId(pe.getId());
-				projectDto.setProjectCode(pe.getProjectCode());
-				projectDto.setProjectName(pe.getProjectName());
-				List<TeamsEntity> teamEntity = pe.getTeam();
-				List<TeamsDTO> allteams = new ArrayList<TeamsDTO>();
-				for(TeamsEntity te : teamEntity){
-					TeamsDTO teamDto = new TeamsDTO();
-					teamDto.setTeamid(te.getId());
-					teamDto.setTeamName(te.getTeamName());
-					allteams.add(teamDto);
-				}
-				projectDto.setTeams(allteams);
-				allProjects.add(projectDto);
-			}
-			
+			projectRepo.save(project);
 		}catch(Exception e){
 			System.out.println(e);
 		}
-		return allProjects;
-	}
+		return "Success";
+	}	
 	
-	@RequestMapping(value="getByProject_Team/{teamId}/{projectId}",method=RequestMethod.GET)
+	@RequestMapping(value="/getProject/{projectId}",method=RequestMethod.GET)
 	@ResponseBody
-	public ProjectsEntity getByProjectTeam(
-			@PathVariable(value="teamId") String teamId,
-			@PathVariable(value="projectId") String projectId){
-			
-		ProjectsEntity pe = projectService.getByTeamProject(teamId, projectId);
-		System.out.println(pe.getProjectCode());
-		for(TeamsEntity te : pe.getTeam()){
+	public String getProject(@PathVariable(value="projectId") String projectId){
+		ProjectEntity project = projectRepo.findById(Integer.parseInt(projectId));
+		System.out.println(project.getProjectName());
+		for(UserEntity ue : project.getUsers()){
+			System.out.println(ue.getName());
+		}
+		for(TeamEntity te : project.getTeams()){
 			System.out.println(te.getTeamName());
 		}
-		
-		return null;
+		return "Success";
 	}
 }

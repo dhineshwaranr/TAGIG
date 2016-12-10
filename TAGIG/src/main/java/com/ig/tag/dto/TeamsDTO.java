@@ -2,7 +2,7 @@ package com.ig.tag.dto;
 
 import java.util.List;
 
-import com.ig.tag.entity.ProjectsEntity;
+import com.ig.tag.entity.ProjectEntity;
 
 public class TeamsDTO extends BaseResponseDTO{
 

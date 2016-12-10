@@ -13,18 +13,18 @@ import com.ig.tag.entity.UserEntity;
 import com.ig.tag.repository.UserRepository;
 
 @Service
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl {
 
 	@Autowired
 	private UserRepository userRepository;
 	
-	@Override
+	
 	public List<UserEntity> getAllUsers() {
 		List<UserEntity> userList = userRepository.findAll();
 		return userList;
 	}
 
-	@Override
+	
 	public UserDTO registerUser(Map<String,String> allUserParameters) {
 		Map<String, String> user = allUserParameters;
 		List<String> params;

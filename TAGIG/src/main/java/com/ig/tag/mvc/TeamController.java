@@ -10,74 +10,97 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.fasterxml.jackson.annotation.JsonView;
+import com.ig.jsonviews.JsonViews;
 import com.ig.tag.dto.ProjectDTO;
 import com.ig.tag.dto.TeamsDTO;
-import com.ig.tag.entity.ProjectsEntity;
-import com.ig.tag.entity.TeamsEntity;
+import com.ig.tag.entity.ProjectEntity;
+import com.ig.tag.entity.TeamEntity;
+import com.ig.tag.entity.UserEntity;
+import com.ig.tag.repository.TeamRepository;
 import com.ig.tag.service.ProjectServiceImpl;
 import com.ig.tag.service.TeamServiceImpl;
+
 
 @Controller
 public class TeamController {
 
 	@Autowired
 	private TeamServiceImpl teamService; 
+	
 	@Autowired
-	private ProjectServiceImpl projectService;
+	private TeamRepository teamRepo;
 	
-	@RequestMapping(value="/addNewTeam" ,method=RequestMethod.POST)
+	@RequestMapping(value="/team",method=RequestMethod.POST)
 	@ResponseBody
-	public String addTeam(@ModelAttribute TeamsEntity team){
-		teamService.addTeam(team);
-		return "success";
-	}
-	
-	@RequestMapping(value="/getAllTeams", method=RequestMethod.GET)
-	@ResponseBody
-	public List<TeamsDTO> getAllTeams(){
-		List<TeamsEntity> teams = teamService.getAllTeams();
-		List<ProjectDTO> teamProjectEntity = new ArrayList<ProjectDTO>();
-		ArrayList<TeamsDTO> allTeamProjects = new ArrayList<TeamsDTO>();
-		
-		for(TeamsEntity t : teams){
-			TeamsDTO teamDto = new TeamsDTO();
-			teamDto.setTeamid(t.getId());
-			teamDto.setTeamCode(t.getTeamCode());
-			teamDto.setTeamName(t.getTeamName());
-			teamDto.setTeamCount(10);
-			teamDto.setResponseCode(1);
-			teamProjectEntity = projectService.getAllProjectsByTeamId(t);
-			teamDto.setProjects(teamProjectEntity);
-			allTeamProjects.add(teamDto);
+	public String create(@ModelAttribute TeamEntity team){
+		try{
+			teamRepo.save(team);
+		}catch(Exception e){
+			System.out.println(e);
 		}
-		
-		return allTeamProjects;
+		return "Success";
 	}
 	
-	@RequestMapping(value="getByTeam_Projects/{teamId}/{projectId}",method=RequestMethod.GET)
+	
+	@RequestMapping(value="/team",method=RequestMethod.GET)
 	@ResponseBody
-	public TeamsEntity getByTeamProject(
-			@PathVariable(value="teamId") String teamId,
-			@PathVariable(value="projectId") String projectId){
-			
-		TeamsEntity pe = teamService.getByTeamProject(teamId, projectId);
-		//System.out.println(pe);
-		/*for(TeamsEntity te : pe.getTeam()){
-			System.out.println(te.getTeamName());
-		}*/
-		
-		return null;
+	public List<TeamEntity> read(){
+		List<TeamEntity> team = null;
+		try{
+			team = teamRepo.findAll();
+			System.out.println(team.size());
+		}catch(Exception e){
+			System.out.println(e);
+		}
+		return team;
 	}
 	
-	@RequestMapping(value="getByTeam/{teamId}",method=RequestMethod.GET)
+	@RequestMapping(value="/team/{teamId}",method=RequestMethod.PUT)
 	@ResponseBody
-	public TeamsEntity getByTeam(
-			@PathVariable(value="teamId") String teamId){
-		TeamsEntity pe = teamService.findByTeamId(Integer.parseInt(teamId));
-		System.out.println("ffff");
-		System.out.println(pe);
-		return pe;
+	public String update(@RequestParam("teamName") String teamName, @PathVariable(value="teamId") String teamId){
+		try{
+			TeamEntity team = teamRepo.findById(Integer.parseInt(teamId));
+			team.setTeamName(teamName);
+			TeamEntity t = teamRepo.save(team);
+		}catch(Exception e){
+			System.out.println(e);
+		}
+		return "Success";
+	}
+	
+	@RequestMapping(value="/team/{teamId}",method=RequestMethod.DELETE)
+	@ResponseBody
+	public String delete(@PathVariable(value="teamId") String teamId){
+		try{
+			TeamEntity team = teamRepo.findById(Integer.parseInt(teamId));
+			teamRepo.delete(team);
+		}catch(Exception e){
+			System.out.println(e);
+		}
+		return "Success";
+	}
+	
+	@RequestMapping(value="/getByUserProject/{userId}/{projectId}",method=RequestMethod.GET)
+	@ResponseBody
+	public String getByUserAndProject(@PathVariable(value="userId") UserEntity user, @PathVariable(value="projectId") ProjectEntity project){
+		List<TeamEntity> p = teamRepo.findByUsersAndProjects(user, project);
+		p.forEach(i -> System.out.println(i.getTeamName()));
+		return "Success";
+	}
+	
+	@RequestMapping(value="/getTeam/{teamId}",method=RequestMethod.GET)
+	@ResponseBody
+	public String getTeam(@PathVariable(value="teamId") String teamId){
+		System.out.println("user: " +teamId);
+		TeamEntity team = teamRepo.findById(Integer.parseInt(teamId));
+		System.out.println(team.getTeamName());
+		for(UserEntity ue : team.getUsers()){
+			System.out.println(ue.getName());
+		}
+		return "Success";
 	}
 }
